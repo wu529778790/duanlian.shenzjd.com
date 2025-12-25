@@ -26,12 +26,6 @@ git push origin main
 
 **短链规则**：使用 commit hash 的前 6 位作为短码，例如 `4975af`。
 
-### 访问短链
-
-```
-https://duanlian.shenzjd.com/4975af
-```
-
 ## 🔗 短链列表
 
 <!-- SHORT_LINKS_START -->
@@ -79,19 +73,6 @@ export default {
 - 每次 push 后自动更新
 - 每天定时更新
 - 手动触发
-
-## 📝 使用示例
-
-```bash
-# 1. 添加一个短链
-git commit --allow-empty -m "https://www.google.com/search?q=hink"
-
-# 2. 推送
-git push
-
-# 3. 查看生成的短码（假设是 a1b2c3d）
-# 访问：https://shenzjd.com/a1b2c3d
-```
 
 ## 🔍 访问统计
 
