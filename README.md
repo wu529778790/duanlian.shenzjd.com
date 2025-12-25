@@ -37,10 +37,9 @@ https://shenzjd.com/4975af
 <!-- SHORT_LINKS_START -->
 | 短链 | 目标链接 | 创建时间 |
 |------|----------|----------|
-| /4975af | <https://github.com/wu529778790/duanlian.shenzjd.com> | 2025-12-25 |
-| /d5becb | <https://shenzjd.com> | 2025-12-25 |
-| /3767c0 | Update links to point to the new domain for the project. | 2025-12-25 |
-| /980fdc | <https://blog.shenzjd.com> | 2025-12-25 |
+| /4975af | https://github.com/wu529778790/duanlian.shenzjd.com | 2025-12-25 |
+| /d5becb | https://shenzjd.com | 2025-12-25 |
+| /980fdc | https://blog.shenzjd.com | 2025-12-25 |
 <!-- SHORT_LINKS_END -->
 
 ## 🛠️ 部署方式
