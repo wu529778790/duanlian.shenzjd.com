@@ -39,10 +39,13 @@ jobs:
           # URL 正则表达式
           url_pattern = re.compile(r'^https?://')
 
+          # 短链域名
+          SHORT_DOMAIN = "https://duanlian.shenzjd.com"
+
           # 开始生成表格
           table_lines = [
-            "| 短链 | 目标链接 | 创建时间 |",
-            "|------|----------|----------|"
+            "| 短链 | 完整短链 | 目标链接 | 创建时间 |",
+            "|------|----------|----------|----------|"
           ]
 
           for line in lines:
@@ -61,6 +64,7 @@ jobs:
 
             # 生成短链（前6位）
             short_code = commit_hash[:6]
+            full_short_link = f"{SHORT_DOMAIN}/{short_code}"
 
             # 格式化时间
             try:
@@ -72,7 +76,7 @@ jobs:
             # 转义 Markdown 特殊字符
             escaped_message = message.replace('|', '\\|')
 
-            table_lines.append(f"| /{short_code} | {escaped_message} | {date_str} |")
+            table_lines.append(f"| /{short_code} | {full_short_link} | {escaped_message} | {date_str} |")
 
           # 保存到文件
           with open('/tmp/links_table.md', 'w') as f:
