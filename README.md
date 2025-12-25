@@ -42,6 +42,7 @@ https://duanlian.shenzjd.com/4975af
 | /980fdc | https://duanlian.shenzjd.com/980fdc | https://blog.shenzjd.com | 2025-12-25 |
 | /398667 | https://duanlian.shenzjd.com/398667 | https://alist.shenzjd.com/ | 2025-12-25 |
 | /2b3e90 | https://duanlian.shenzjd.com/2b3e90 | https://news.shenzjd.com/ | 2025-12-25 |
+| /9cd1f4 | https://duanlian.shenzjd.com/9cd1f4 | https://panhub.shenzjd.com/ | 2025-12-25 |
 <!-- SHORT_LINKS_END -->
 
 ## 🛠️ 部署方式
