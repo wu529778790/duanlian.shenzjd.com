@@ -1,0 +1,120 @@
+name: Update README with Short Links
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 每天自动更新一次
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史
+
+      - name: Generate short links table
+        id: generate_table
+        run: |
+          # 使用 Python 生成表格（更可靠）
+          python3 << 'EOF'
+          import subprocess
+          import datetime
+
+          # 获取所有 commit 信息
+          result = subprocess.run(
+            ['git', 'log', '--all', '--format=%H|%ct|%s', '--reverse'],
+            capture_output=True, text=True
+          )
+
+          lines = result.stdout.strip().split('\n')
+
+          # 开始生成表格
+          table_lines = [
+            "| 短链 | 目标链接 | 创建时间 |",
+            "|------|----------|----------|"
+          ]
+
+          for line in lines:
+            if not line.strip():
+              continue
+
+            parts = line.split('|', 2)
+            if len(parts) < 3:
+              continue
+
+            commit_hash, timestamp, message = parts
+
+            # 生成短链（前6位）
+            short_code = commit_hash[:6]
+
+            # 格式化时间
+            try:
+              dt = datetime.datetime.fromtimestamp(int(timestamp))
+              date_str = dt.strftime('%Y-%m-%d')
+            except:
+              date_str = 'Unknown'
+
+            # 转义 Markdown 特殊字符
+            escaped_message = message.replace('|', '\\|')
+
+            table_lines.append(f"| /{short_code} | {escaped_message} | {date_str} |")
+
+          # 保存到文件
+          with open('/tmp/links_table.md', 'w') as f:
+            f.write('\n'.join(table_lines))
+
+          print("Generated table:")
+          print('\n'.join(table_lines))
+          EOF
+
+          # 保存到环境变量
+          echo "TABLE_CONTENT<<EOF" >> $GITHUB_ENV
+          cat /tmp/links_table.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Update README
+        run: |
+          # 使用 sed 替换 <!-- SHORT_LINKS_START --> 和 <!-- SHORT_LINKS_END --> 之间的内容
+          if [ -f README.md ]; then
+            # 创建临时文件
+            cp README.md README.md.tmp
+
+            # 提取表头
+            TABLE_HEADER=$(echo "$TABLE_CONTENT" | head -2)
+            # 提取表格内容（去掉表头）
+            TABLE_BODY=$(echo "$TABLE_CONTENT" | tail -n +3)
+
+            # 使用 awk 替换标记之间的内容
+            awk -v header="$TABLE_HEADER" -v body="$TABLE_BODY" '
+              /<!-- SHORT_LINKS_START -->/ { print; print header; print body; skip=1; next }
+              /<!-- SHORT_LINKS_END -->/ { skip=0 }
+              skip { next } 1
+            ' README.md.tmp > README.md
+
+            rm README.md.tmp
+          fi
+
+          echo "Updated README:"
+          cat README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add README.md
+
+          # 检查是否有变更
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "docs: auto-update README with short links"
+            git push
+          fi
