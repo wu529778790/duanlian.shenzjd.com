@@ -44,8 +44,8 @@ jobs:
 
           # 开始生成表格
           table_lines = [
-            "| 短链 | 完整短链 | 目标链接 | 创建时间 |",
-            "|------|----------|----------|----------|"
+            "| 完整短链 | 目标链接 | 创建时间 |",
+            "|----------|----------|----------|"
           ]
 
           for line in lines:
@@ -76,7 +76,7 @@ jobs:
             # 转义 Markdown 特殊字符
             escaped_message = message.replace('|', '\\|')
 
-            table_lines.append(f"| /{short_code} | {full_short_link} | {escaped_message} | {date_str} |")
+            table_lines.append(f"| {full_short_link} | {escaped_message} | {date_str} |")
 
           # 保存到文件
           with open('/tmp/links_table.md', 'w') as f:
