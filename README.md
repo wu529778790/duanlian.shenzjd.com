@@ -37,13 +37,13 @@ https://duanlian.shenzjd.com/4975af
 <!-- SHORT_LINKS_START -->
 | 短链 | 完整短链 | 目标链接 | 创建时间 |
 |------|----------|----------|----------|
-| /4975af | https://duanlian.shenzjd.com/4975af | https://github.com/wu529778790/duanlian.shenzjd.com | 2025-12-25 |
-| /d5becb | https://duanlian.shenzjd.com/d5becb | https://shenzjd.com | 2025-12-25 |
-| /980fdc | https://duanlian.shenzjd.com/980fdc | https://blog.shenzjd.com | 2025-12-25 |
-| /398667 | https://duanlian.shenzjd.com/398667 | https://alist.shenzjd.com/ | 2025-12-25 |
-| /2b3e90 | https://duanlian.shenzjd.com/2b3e90 | https://news.shenzjd.com/ | 2025-12-25 |
-| /9cd1f4 | https://duanlian.shenzjd.com/9cd1f4 | https://panhub.shenzjd.com/ | 2025-12-25 |
-| /54ef62 | https://duanlian.shenzjd.com/54ef62 | https://parse.shenzjd.com/ | 2025-12-25 |
+| /4975af | <https://duanlian.shenzjd.com/4975af> | <https://github.com/wu529778790/duanlian.shenzjd.com> | 2025-12-25 |
+| /d5becb | <https://duanlian.shenzjd.com/d5becb> | <https://shenzjd.com> | 2025-12-25 |
+| /980fdc | <https://duanlian.shenzjd.com/980fdc> | <https://blog.shenzjd.com> | 2025-12-25 |
+| /398667 | <https://duanlian.shenzjd.com/398667> | <https://alist.shenzjd.com/> | 2025-12-25 |
+| /2b3e90 | <https://duanlian.shenzjd.com/2b3e90> | <https://news.shenzjd.com/> | 2025-12-25 |
+| /9cd1f4 | <https://duanlian.shenzjd.com/9cd1f4> | <https://panhub.shenzjd.com/> | 2025-12-25 |
+| /54ef62 | <https://duanlian.shenzjd.com/54ef62> | <https://parse.shenzjd.com/> | 2025-12-25 |
 <!-- SHORT_LINKS_END -->
 
 ## 🛠️ 部署方式
@@ -52,32 +52,13 @@ https://duanlian.shenzjd.com/4975af
 
 ```javascript
 const GIT_REPO = "https://github.com/wu529778790/duanlian.shenzjd.com"
-
 export default {
   async fetch(request) {
     const { pathname } = new URL(request.url)
-    const shortCode = pathname.slice(1) // 移除开头的 /
-
-    if (!shortCode || shortCode === '') {
-      return Response.redirect(GIT_REPO)
-    }
-
-    const gitPatch = `${GIT_REPO}/commit/${shortCode}.patch`
-
-    try {
-      const patch = await fetch(gitPatch, {
-        cf: {
-          cacheEverything: true,
-          cacheTtlByStatus: { '200-299': 86400 }
-        }
-      }).then(res => res.text())
-
-      const url = patch.match(/^Subject:\s*\[PATCH\](.*)$/m)?.[1]?.trim()
-
-      return Response.redirect(url || GIT_REPO, 302)
-    } catch (error) {
-      return new Response('Short link not found', { status: 404 })
-    }
+    const gitPatch = `${GIT_REPO}/commit${pathname}.patch`
+    const patch = await fetch(gitPatch, { cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 86400 } }}).then(res => res.text())
+    const url = pathname === '/' ? GIT_REPO : patch.match(/^Subject:\s*\[PATCH\](.*)$/m)?.[1]?.trim()
+    return Response.redirect(url || GIT_REPO)
   }
 }
 ```
