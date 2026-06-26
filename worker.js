@@ -417,17 +417,58 @@ function handleHome(request, env) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #FFFFFF;
+      --bg-card: #F4F4F5;
+      --bg-input: #FFFFFF;
+      --border: #E4E4E7;
+      --text: #18181B;
+      --text-secondary: #71717A;
+      --text-muted: #A1A1AA;
+      --accent: #22C55E;
+      --accent-dark: #16A34A;
+      --accent-bg: rgba(34, 197, 94, 0.1);
+      --accent-border: rgba(34, 197, 94, 0.3);
+      --btn-bg: #F4F4F5;
+      --btn-hover: #E4E4E7;
+      --error-bg: rgba(239, 68, 68, 0.1);
+      --error-border: rgba(239, 68, 68, 0.2);
+      --error-text: #DC2626;
+      --icon-btn-hover: #E4E4E7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #09090B;
+        --bg-card: #18181B;
+        --bg-input: #09090B;
+        --border: #27272A;
+        --text: #FAFAFA;
+        --text-secondary: #71717A;
+        --text-muted: #A1A1AA;
+        --accent: #22C55E;
+        --accent-dark: #16A34A;
+        --accent-bg: rgba(34, 197, 94, 0.08);
+        --accent-border: rgba(34, 197, 94, 0.2);
+        --btn-bg: #18181B;
+        --btn-hover: #27272A;
+        --error-bg: rgba(239, 68, 68, 0.1);
+        --error-border: rgba(239, 68, 68, 0.2);
+        --error-text: #FCA5A5;
+        --icon-btn-hover: #27272A;
+      }
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #09090B;
+      background: var(--bg);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 6rem 1.5rem 4rem;
-      color: #FAFAFA;
+      padding: 3rem 1.5rem 4rem;
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
+      transition: background 300ms ease, color 300ms ease;
     }
     .container {
       width: 100%;
@@ -437,7 +478,7 @@ function handleHome(request, env) {
     /* Header */
     .header {
       text-align: center;
-      margin-bottom: 5rem;
+      margin-bottom: 3rem;
     }
     .logo {
       display: inline-flex;
@@ -447,20 +488,20 @@ function handleHome(request, env) {
       height: 56px;
       background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
       border-radius: 16px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);
     }
     .logo svg { width: 28px; height: 28px; color: #09090B; }
     .header h1 {
-      font-size: 2.5rem;
+      font-size: 2.25rem;
       font-weight: 700;
-      color: #FAFAFA;
-      margin-bottom: 0.75rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
       letter-spacing: -0.03em;
     }
     .header p {
-      font-size: 1.125rem;
-      color: #71717A;
+      font-size: 1rem;
+      color: var(--text-secondary);
       max-width: 420px;
       margin: 0 auto;
       line-height: 1.6;
@@ -472,9 +513,9 @@ function handleHome(request, env) {
       align-items: center;
       gap: 0.75rem;
       font-size: 0.9rem;
-      color: #A1A1AA;
+      color: var(--text-muted);
       justify-content: center;
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
     }
     .user-info .avatar {
       width: 36px; height: 36px;
@@ -505,7 +546,7 @@ function handleHome(request, env) {
       text-decoration: none;
     }
     .btn:focus-visible {
-      outline: 2px solid #22C55E;
+      outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
     .btn-primary {
@@ -521,26 +562,26 @@ function handleHome(request, env) {
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
     .btn-github {
-      background: #18181B;
-      color: #FAFAFA;
-      border: 1px solid #27272A;
+      background: var(--btn-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
-    .btn-github:hover { background: #27272A; border-color: #3F3F46; }
+    .btn-github:hover { background: var(--btn-hover); }
     .btn-ghost {
       background: transparent;
-      color: #A1A1AA;
+      color: var(--text-muted);
       padding: 0.5rem 0.875rem;
       font-size: 0.875rem;
     }
-    .btn-ghost:hover { background: #18181B; color: #FAFAFA; }
+    .btn-ghost:hover { background: var(--btn-hover); color: var(--text); }
 
     /* Input Card */
     .input-card {
-      background: #18181B;
-      border: 1px solid #27272A;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     .input-group {
       display: flex;
@@ -549,18 +590,18 @@ function handleHome(request, env) {
     .input-group input {
       flex: 1;
       padding: 1rem 1.25rem;
-      background: #09090B;
-      border: 1px solid #27272A;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 1rem;
       font-family: 'SF Mono', 'Fira Code', monospace;
-      color: #FAFAFA;
+      color: var(--text);
       outline: none;
       transition: border-color 200ms ease, box-shadow 200ms ease;
     }
-    .input-group input::placeholder { color: #52525B; }
+    .input-group input::placeholder { color: var(--text-muted); }
     .input-group input:focus {
-      border-color: #22C55E;
+      border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
     }
     .input-group input:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -568,8 +609,8 @@ function handleHome(request, env) {
     /* Result */
     .result {
       display: none;
-      background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(34, 197, 94, 0.2);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
       border-radius: 12px;
       padding: 1.25rem 1.5rem;
       margin-top: 1.25rem;
@@ -578,7 +619,7 @@ function handleHome(request, env) {
     .result.show { display: block; }
     .result-label {
       font-size: 0.75rem;
-      color: #22C55E;
+      color: var(--accent);
       margin-bottom: 0.75rem;
       font-weight: 600;
       display: flex;
@@ -594,28 +635,31 @@ function handleHome(request, env) {
       gap: 1rem;
     }
     .result-url a {
-      color: #4ADE80;
+      color: #16A34A;
       font-size: 1.125rem;
       font-weight: 600;
       font-family: 'SF Mono', 'Fira Code', monospace;
       text-decoration: none;
       word-break: break-all;
     }
+    @media (prefers-color-scheme: dark) {
+      .result-url a { color: #4ADE80; }
+    }
     .result-url a:hover { text-decoration: underline; }
 
     /* Links Section */
     .links-section {
-      background: #18181B;
-      border: 1px solid #27272A;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.5rem;
     }
     .links-section h3 {
       font-size: 0.75rem;
-      color: #52525B;
+      color: var(--text-muted);
       margin-bottom: 1rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid #27272A;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -629,27 +673,27 @@ function handleHome(request, env) {
       justify-content: space-between;
       align-items: center;
       padding: 0.875rem 0;
-      border-bottom: 1px solid #27272A;
+      border-bottom: 1px solid var(--border);
       font-size: 0.9rem;
       transition: all 150ms ease;
     }
     .link-item:last-child { border-bottom: none; }
     .link-item:hover {
-      background: rgba(34, 197, 94, 0.04);
+      background: var(--accent-bg);
       margin: 0 -0.75rem;
       padding-left: 0.75rem;
       padding-right: 0.75rem;
       border-radius: 8px;
     }
     .link-code {
-      color: #22C55E;
+      color: var(--accent);
       font-weight: 600;
       font-family: 'SF Mono', 'Fira Code', monospace;
       min-width: 80px;
     }
     .link-code:hover { text-decoration: underline; }
     .link-target {
-      color: #71717A;
+      color: var(--text-secondary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -677,19 +721,22 @@ function handleHome(request, env) {
       transition: all 150ms ease;
       flex-shrink: 0;
     }
-    .btn-icon:hover { background: #27272A; color: #FAFAFA; }
-    .btn-delete:hover { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
-    .btn-copy.copied { background: rgba(34, 197, 94, 0.15); color: #4ADE80; }
+    .btn-icon:hover { background: var(--icon-btn-hover); color: var(--text); }
+    .btn-delete:hover { background: rgba(239, 68, 68, 0.15); color: #DC2626; }
+    @media (prefers-color-scheme: dark) {
+      .btn-delete:hover { color: #FCA5A5; }
+    }
+    .btn-copy.copied { background: var(--accent-bg); color: var(--accent); }
 
     /* Error */
     .error-msg {
       display: none;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.2);
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
       border-radius: 10px;
       padding: 1rem 1.25rem;
       margin-bottom: 1rem;
-      color: #FCA5A5;
+      color: var(--error-text);
       font-size: 0.9rem;
     }
     .error-msg.show { display: block; }
@@ -699,7 +746,7 @@ function handleHome(request, env) {
       display: inline-block;
       width: 18px;
       height: 18px;
-      border: 2px solid #09090B;
+      border: 2px solid var(--text);
       border-top-color: transparent;
       border-radius: 50%;
       animation: spin 600ms linear infinite;
@@ -710,10 +757,10 @@ function handleHome(request, env) {
     /* Login Hint */
     .login-hint {
       text-align: center;
-      padding: 4rem 0;
+      padding: 3rem 0;
     }
     .login-hint p {
-      color: #52525B;
+      color: var(--text-muted);
       font-size: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -721,15 +768,18 @@ function handleHome(request, env) {
     /* Modal */
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.5);
       display: none; justify-content: center; align-items: center;
       z-index: 100;
       backdrop-filter: blur(8px);
     }
+    @media (prefers-color-scheme: dark) {
+      .modal-overlay { background: rgba(0,0,0,0.8); }
+    }
     .modal-overlay.show { display: flex; }
     .modal-card {
-      background: #18181B;
-      border: 1px solid #27272A;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 2rem;
       max-width: 480px;
@@ -761,15 +811,15 @@ function handleHome(request, env) {
     <!-- Fork 提示弹窗 -->
     <div id="forkModal" class="modal-overlay">
       <div class="modal-card">
-        <h3 style="font-size:1rem;color:#F8FAFC;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;">
+        <h3 style="font-size:1rem;color:var(--text);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           首次登录须知
         </h3>
-        <div style="font-size:0.85rem;color:#94A3B8;line-height:1.6;margin-bottom:1rem;">
-          <p style="margin-bottom:0.5rem;">登录后，系统将 <strong style="color:#F8FAFC;">fork</strong> 主仓库到你的 GitHub 账号下：</p>
-          <p style="background:#0F172A;padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.8rem;color:#22C55E;margin-bottom:0.5rem;">yourname/duanlian.shenzjd.com</p>
-          <p style="margin-bottom:0.5rem;">你创建的所有短链数据将存储在 <strong style="color:#F8FAFC;">你自己的仓库</strong> 中。</p>
-          <p style="color:#64748B;font-size:0.8rem;">如果删除该 fork 仓库，对应的短链将失效。</p>
+        <div style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">
+          <p style="margin-bottom:0.5rem;">登录后，系统将 <strong style="color:var(--text);">fork</strong> 主仓库到你的 GitHub 账号下：</p>
+          <p style="background:var(--bg-input);padding:0.5rem;border-radius:4px;font-family:monospace;font-size:0.8rem;color:var(--accent);margin-bottom:0.5rem;">yourname/duanlian.shenzjd.com</p>
+          <p style="margin-bottom:0.5rem;">你创建的所有短链数据将存储在 <strong style="color:var(--text);">你自己的仓库</strong> 中。</p>
+          <p style="color:var(--text-muted);font-size:0.8rem;">如果删除该 fork 仓库，对应的短链将失效。</p>
         </div>
         <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
           <button class="btn btn-ghost" id="cancelLogin">取消</button>
