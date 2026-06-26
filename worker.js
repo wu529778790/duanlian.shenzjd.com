@@ -17,6 +17,7 @@ export default {
       if (pathname === '/callback') return handleCallback(request, env)
       if (pathname === '/logout') return handleLogout()
       if (pathname === '/api/links' && request.method === 'POST') return handleCreateLink(request, env)
+      if (pathname === '/api/links' && request.method === 'GET') return handleListLinks(request, env)
       if (pathname === '/api/user') return handleGetUser(request, env)
 
       // 短链重定向：/xxxxxx 或 /owner/xxxxxx
@@ -208,6 +209,43 @@ async function handleCreateLink(request, env) {
     : `https://${domain}/${repoOwner}/${shortCode}`
 
   return Response.json({ shortCode, shortLink, targetUrl })
+}
+
+// ========== 获取短链列表 ==========
+
+async function handleListLinks(request, env) {
+  const headers = {
+    'User-Agent': 'duanlian-worker',
+    Accept: 'application/vnd.github.v3+json',
+  }
+
+  const res = await fetch(
+    `${GITHUB_API}/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/commits?per_page=100`,
+    { headers }
+  )
+  if (!res.ok) {
+    return Response.json({ error: '获取失败' }, { status: 502 })
+  }
+
+  const commits = await res.json()
+  const domain = env.DOMAIN || 'duanlian.shenzjd.com'
+
+  const links = commits
+    .map(c => {
+      const msg = c.commit.message.trim()
+      if (!/^https?:\/\/.+/.test(msg)) return null
+      const shortCode = c.sha.slice(0, 6)
+      const date = c.commit.author?.date?.slice(0, 10) || ''
+      return {
+        shortCode,
+        shortLink: `https://${domain}/${shortCode}`,
+        targetUrl: msg,
+        createdAt: date,
+      }
+    })
+    .filter(Boolean)
+
+  return Response.json({ links })
 }
 
 // ========== 短链重定向 ==========
@@ -541,7 +579,7 @@ function handleHome(request, env) {
 
   <script>
     const $ = (sel) => document.querySelector(sel)
-    const links = JSON.parse(localStorage.getItem('short_links') || '[]')
+    let links = []
 
     async function checkAuth() {
       try {
@@ -564,6 +602,21 @@ function handleHome(request, env) {
       } catch (e) {
         $('#loginHint').style.display = 'block'
         $('#mainForm').style.display = 'none'
+      }
+    }
+
+    async function fetchLinks() {
+      try {
+        const res = await fetch('/api/links')
+        const data = await res.json()
+        if (data.links) {
+          links = data.links
+          renderLinks()
+        }
+      } catch (e) {
+        // 接口失败时用本地缓存
+        links = JSON.parse(localStorage.getItem('short_links') || '[]')
+        renderLinks()
       }
     }
 
@@ -628,6 +681,7 @@ function handleHome(request, env) {
         resultEl.classList.add('show')
         urlInput.value = ''
 
+        // 本地缓存
         links.push({ shortCode: data.shortCode, shortLink: data.shortLink, targetUrl: data.targetUrl })
         localStorage.setItem('short_links', JSON.stringify(links))
         renderLinks()
@@ -656,7 +710,7 @@ function handleHome(request, env) {
     })
 
     checkAuth()
-    renderLinks()
+    fetchLinks()
   </script>
 </body>
 </html>`
