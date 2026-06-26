@@ -249,9 +249,8 @@ async function handleRedirect(pathname, env) {
 
 function render404(shortCode) {
   return new Response(`<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>短链不存在</title>
-<style>body{font-family:system-ui;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5}
-.box{text-align:center}.box h1{font-size:4rem;margin:0;color:#e74c3c}.box p{color:#666;margin:1rem 0}a{color:#3498db;text-decoration:none}</style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>短链不存在</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Segoe UI",monospace;background:#0F172A;color:#F8FAFC;display:flex;justify-content:center;align-items:center;height:100vh}.box{text-align:center}.box h1{font-size:4rem;margin:0;color:#EF4444}.box p{color:#64748B;margin:1rem 0;font-size:0.9rem}.box code{color:#F8FAFC;background:#1E293B;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.85rem}.box a{color:#22C55E;text-decoration:none;font-weight:500}.box a:hover{text-decoration:underline}</style>
 </head><body><div class="box"><h1>404</h1><p>短链 <code>/${shortCode}</code> 不存在</p><a href="/">返回首页</a></div></body></html>`, {
     status: 404,
     headers: { 'Content-Type': 'text/html;charset=utf-8' },
@@ -270,210 +269,273 @@ function handleHome(request, env) {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Mono", "Segoe UI", Roboto, monospace;
+      background: #0F172A;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       padding: 2rem 1rem;
+      color: #F8FAFC;
     }
     .container {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-      padding: 2.5rem;
+      background: #1E293B;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 2rem;
       width: 100%;
-      max-width: 560px;
+      max-width: 520px;
     }
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
-    .header h1 { font-size: 1.5rem; color: #333; }
-    .header h1 span { font-size: 1.8rem; margin-right: 0.3rem; }
+    .header h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #F8FAFC;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header h1 svg { width: 20px; height: 20px; color: #22C55E; }
     .user-info {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
-      color: #666;
+      font-size: 0.8rem;
+      color: #94A3B8;
     }
     .user-info .avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: #667eea;
-      color: #fff;
+      width: 24px; height: 24px;
+      border-radius: 4px;
+      background: #334155;
+      color: #22C55E;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      font-size: 0.8rem;
+      font-weight: 600;
+      font-size: 0.7rem;
+      font-family: monospace;
     }
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
       padding: 0.5rem 1rem;
-      border-radius: 8px;
-      border: none;
+      border-radius: 6px;
+      border: 1px solid transparent;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
-      transition: all 0.2s;
+      font-family: inherit;
+      transition: all 150ms ease;
       text-decoration: none;
     }
+    .btn:focus-visible {
+      outline: 2px solid #22C55E;
+      outline-offset: 2px;
+    }
     .btn-primary {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
-      width: 100%;
-      padding: 0.85rem;
-      font-size: 1rem;
+      background: #22C55E;
+      color: #0F172A;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
     }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-primary:hover { background: #16A34A; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
     .btn-github {
-      background: #24292e;
-      color: #fff;
-      padding: 0.5rem 1rem;
+      background: #334155;
+      color: #F8FAFC;
+      border-color: #475569;
     }
-    .btn-github:hover { background: #2f363d; }
+    .btn-github:hover { background: #475569; }
     .btn-ghost {
       background: transparent;
-      color: #667eea;
-      padding: 0.4rem 0.6rem;
-      font-size: 0.85rem;
+      color: #94A3B8;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.8rem;
     }
-    .btn-ghost:hover { background: #f0f0f0; }
+    .btn-ghost:hover { background: #334155; color: #F8FAFC; }
     .input-group {
       display: flex;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
     .input-group input {
       flex: 1;
-      padding: 0.85rem 1rem;
-      border: 2px solid #e8e8e8;
-      border-radius: 10px;
-      font-size: 1rem;
+      padding: 0.65rem 0.85rem;
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: monospace;
+      color: #F8FAFC;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 150ms ease;
     }
-    .input-group input:focus { border-color: #667eea; }
-    .input-group input:disabled { background: #f9f9f9; cursor: not-allowed; }
+    .input-group input::placeholder { color: #475569; }
+    .input-group input:focus { border-color: #22C55E; }
+    .input-group input:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .result {
       display: none;
-      background: #f0fdf4;
-      border: 1px solid #86efac;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      animation: fadeIn 0.3s;
+      background: #052E16;
+      border: 1px solid #166534;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 200ms ease;
     }
     .result.show { display: block; }
-    .result-label { font-size: 0.8rem; color: #16a34a; margin-bottom: 0.3rem; font-weight: 600; }
+    .result-label {
+      font-size: 0.75rem;
+      color: #22C55E;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .result-label svg { width: 14px; height: 14px; }
     .result-url {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
     .result-url a {
-      color: #16a34a;
-      font-size: 1.1rem;
+      color: #4ADE80;
+      font-size: 0.9rem;
       font-weight: 600;
+      font-family: monospace;
       text-decoration: none;
       word-break: break-all;
     }
     .result-url a:hover { text-decoration: underline; }
 
-    .links-section { margin-top: 1.5rem; }
+    .links-section { margin-top: 1.25rem; }
     .links-section h3 {
-      font-size: 0.95rem;
-      color: #666;
-      margin-bottom: 0.8rem;
+      font-size: 0.8rem;
+      color: #64748B;
+      margin-bottom: 0.6rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
+    .links-section h3 svg { width: 14px; height: 14px; }
     .link-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid #f5f5f5;
-      font-size: 0.85rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #1E293B;
+      font-size: 0.8rem;
     }
     .link-item:last-child { border-bottom: none; }
     .link-code {
-      color: #667eea;
+      color: #22C55E;
       font-weight: 600;
       font-family: monospace;
       min-width: 60px;
     }
+    .link-code:hover { text-decoration: underline; }
     .link-target {
-      color: #888;
+      color: #64748B;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 320px;
+      max-width: 280px;
       text-align: right;
+      font-family: monospace;
     }
 
     .error-msg {
       display: none;
-      background: #fef2f2;
-      border: 1px solid #fca5a5;
-      border-radius: 10px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1rem;
-      color: #dc2626;
-      font-size: 0.9rem;
+      background: #450A0A;
+      border: 1px solid #991B1B;
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      margin-bottom: 0.75rem;
+      color: #FCA5A5;
+      font-size: 0.85rem;
+      font-family: monospace;
     }
     .error-msg.show { display: block; }
 
-    .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #0F172A;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 600ms linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
     .login-hint {
       text-align: center;
-      color: #999;
-      font-size: 0.9rem;
-      margin-top: 1rem;
+      color: #64748B;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
     }
+    .login-hint .btn { margin-top: 1rem; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1><span>🎯</span>短链系统</h1>
+      <h1>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        短链系统
+      </h1>
       <div id="authArea"></div>
     </div>
 
     <div id="loginHint" class="login-hint" style="display:none;">
-      <p>请先登录 GitHub 账号才能创建短链</p>
-      <a href="/login" class="btn btn-github" style="margin-top:0.8rem;">🔑 使用 GitHub 登录</a>
+      <p>使用 GitHub 账号登录即可创建短链</p>
+      <a href="/login" class="btn btn-github">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        GitHub 登录
+      </a>
     </div>
 
     <div id="mainForm" style="display:none;">
       <div class="input-group">
-        <input type="url" id="urlInput" placeholder="输入长链接，如 https://example.com/very/long/path" />
-        <button class="btn btn-primary" id="submitBtn" style="width:auto;padding:0.85rem 1.5rem;">生成</button>
+        <input type="url" id="urlInput" placeholder="https://example.com/very/long/path" aria-label="输入长链接" />
+        <button class="btn btn-primary" id="submitBtn" aria-label="生成短链">生成</button>
       </div>
 
-      <div id="errorMsg" class="error-msg"></div>
+      <div id="errorMsg" class="error-msg" role="alert"></div>
       <div id="result" class="result">
-        <div class="result-label">✅ 短链已生成</div>
+        <div class="result-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          短链已生成
+        </div>
         <div class="result-url">
           <a id="shortLink" href="#" target="_blank"></a>
-          <button class="btn btn-ghost" id="copyBtn">📋 复制</button>
+          <button class="btn btn-ghost" id="copyBtn" aria-label="复制短链">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            复制
+          </button>
         </div>
       </div>
     </div>
 
     <div class="links-section">
-      <h3>📌 最近生成的短链</h3>
-      <div id="linksList"><p style="color:#ccc;font-size:0.85rem;">暂无记录</p></div>
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        最近生成
+      </h3>
+      <div id="linksList"><p style="color:#475569;font-size:0.8rem;font-family:monospace;">暂无记录</p></div>
     </div>
   </div>
 
@@ -481,7 +543,6 @@ function handleHome(request, env) {
     const $ = (sel) => document.querySelector(sel)
     const links = JSON.parse(localStorage.getItem('short_links') || '[]')
 
-    // 检查登录状态
     async function checkAuth() {
       try {
         const res = await fetch('/api/user')
@@ -506,11 +567,10 @@ function handleHome(request, env) {
       }
     }
 
-    // 渲染链接列表
     function renderLinks() {
       const container = $('#linksList')
       if (!links.length) {
-        container.innerHTML = '<p style="color:#ccc;font-size:0.85rem;">暂无记录</p>'
+        container.innerHTML = '<p style="color:#475569;font-size:0.8rem;font-family:monospace;">暂无记录</p>'
         return
       }
       container.innerHTML = links.slice().reverse().map(link =>
@@ -525,14 +585,12 @@ function handleHome(request, env) {
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
     }
 
-    // 提交创建短链
     $('#submitBtn').addEventListener('click', async () => {
       const urlInput = $('#urlInput')
       const targetUrl = urlInput.value.trim()
       const errorEl = $('#errorMsg')
       const resultEl = $('#result')
 
-      // 清除之前的状态
       errorEl.classList.remove('show')
       resultEl.classList.remove('show')
 
@@ -565,13 +623,11 @@ function handleHome(request, env) {
           return
         }
 
-        // 显示结果
         $('#shortLink').href = data.shortLink
         $('#shortLink').textContent = data.shortLink
         resultEl.classList.add('show')
         urlInput.value = ''
 
-        // 保存到本地
         links.push({ shortCode: data.shortCode, shortLink: data.shortLink, targetUrl: data.targetUrl })
         localStorage.setItem('short_links', JSON.stringify(links))
         renderLinks()
@@ -584,22 +640,21 @@ function handleHome(request, env) {
       }
     })
 
-    // Enter 键提交
     $('#urlInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') $('#submitBtn').click()
     })
 
-    // 复制短链
     $('#copyBtn').addEventListener('click', () => {
       const text = $('#shortLink').textContent
       navigator.clipboard.writeText(text).then(() => {
         const btn = $('#copyBtn')
-        btn.textContent = '✅ 已复制'
-        setTimeout(() => { btn.textContent = '📋 复制' }, 1500)
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> 已复制'
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制'
+        }, 1500)
       })
     })
 
-    // 初始化
     checkAuth()
     renderLinks()
   </script>
