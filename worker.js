@@ -104,10 +104,10 @@ async function handleCallback(request, env) {
 }
 
 function handleLogout() {
-  const response = Response.redirect('/', 302)
-  response.headers.append('Set-Cookie', setCookie('gh_token', '', 0))
-  response.headers.append('Set-Cookie', setCookie('gh_user', '', 0))
-  return response
+  const headers = new Headers({ Location: '/' })
+  headers.append('Set-Cookie', setCookie('gh_token', '', 0))
+  headers.append('Set-Cookie', setCookie('gh_user', '', 0))
+  return new Response(null, { status: 302, headers })
 }
 
 async function handleGetUser(request, env) {
