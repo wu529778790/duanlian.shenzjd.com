@@ -868,17 +868,17 @@ function handleHome(request, env) {
   <nav class="navbar">
     <a href="/" class="nav-logo">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      短链
+      快链
     </a>
     <div class="nav-links">
-      <a href="https://shenzjd.com/" class="nav-link">🏠 首页</a>
-      <a href="https://alist.shenzjd.com/" class="nav-link">📁 Alist</a>
-      <a href="https://panhub.shenzjd.com/" class="nav-link">🔍 网盘搜索</a>
-      <a href="https://duanlian.shenzjd.com/" class="nav-link active">🔗 短链</a>
-      <a href="https://parse.shenzjd.com/" class="nav-link">🎬 视频解析</a>
-      <a href="https://newshub.shenzjd.com/" class="nav-link">📰 热点聚合</a>
-      <a href="https://navhub.shenzjd.com/" class="nav-link">🧭 个人导航</a>
-      <a href="https://bing.shenzjd.com/" class="nav-link">🖼️ 必应壁纸</a>
+      <a href="https://shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🏠 首页</a>
+      <a href="https://alist.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">📁 在线网盘</a>
+      <a href="https://panhub.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🔍 网盘搜索</a>
+      <a href="https://duanlian.shenzjd.com/" class="nav-link active">🔗 快链</a>
+      <a href="https://parse.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🎬 视频解析</a>
+      <a href="https://newshub.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">📰 热点聚合</a>
+      <a href="https://navhub.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🧭 个人导航</a>
+      <a href="https://bing.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🖼️ 必应壁纸</a>
     </div>
     <div class="nav-social">
       <a href="https://t.me/shenzjd_com" target="_blank" rel="noopener" aria-label="Telegram">
