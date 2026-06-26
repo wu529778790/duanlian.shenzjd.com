@@ -352,69 +352,74 @@ function handleHome(request, env) {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Mono", "Segoe UI", Roboto, monospace;
-      background: #0F172A;
+      background: #0A0F1C;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 2rem 1rem;
+      padding: 4rem 1.5rem;
       color: #F8FAFC;
     }
     .container {
-      background: #1E293B;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 2rem;
       width: 100%;
-      max-width: 520px;
+      max-width: 680px;
     }
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
+      text-align: center;
+      margin-bottom: 4rem;
     }
     .header h1 {
-      font-size: 1.1rem;
-      font-weight: 600;
+      font-size: 2rem;
+      font-weight: 700;
       color: #F8FAFC;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
     }
-    .header h1 svg { width: 20px; height: 20px; color: #22C55E; }
+    .header h1 svg { width: 28px; height: 28px; color: #22C55E; }
+    .header p {
+      font-size: 1rem;
+      color: #64748B;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
     .user-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
+      gap: 0.75rem;
+      font-size: 0.9rem;
       color: #94A3B8;
+      justify-content: center;
     }
     .user-info .avatar {
-      width: 24px; height: 24px;
-      border-radius: 4px;
-      background: #334155;
-      color: #22C55E;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+      color: #0F172A;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 0.7rem;
+      font-weight: 700;
+      font-size: 0.85rem;
       font-family: monospace;
     }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
       border: 1px solid transparent;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 500;
       font-family: inherit;
-      transition: all 150ms ease;
+      transition: all 200ms ease;
       text-decoration: none;
     }
     .btn:focus-visible {
@@ -422,75 +427,88 @@ function handleHome(request, env) {
       outline-offset: 2px;
     }
     .btn-primary {
-      background: #22C55E;
+      background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
       color: #0F172A;
-      padding: 0.6rem 1.2rem;
+      padding: 0.85rem 2rem;
       font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
     }
-    .btn-primary:hover { background: #16A34A; }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
     .btn-github {
-      background: #334155;
+      background: #1E293B;
       color: #F8FAFC;
-      border-color: #475569;
+      border-color: #334155;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
     }
-    .btn-github:hover { background: #475569; }
+    .btn-github:hover { background: #334155; border-color: #475569; }
     .btn-ghost {
       background: transparent;
       color: #94A3B8;
-      padding: 0.35rem 0.5rem;
-      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
     }
-    .btn-ghost:hover { background: #334155; color: #F8FAFC; }
+    .btn-ghost:hover { background: #1E293B; color: #F8FAFC; }
+
+    .input-card {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
     .input-group {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      gap: 0.75rem;
     }
     .input-group input {
       flex: 1;
-      padding: 0.65rem 0.85rem;
-      background: #0F172A;
-      border: 1px solid #334155;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      background: #0A0F1C;
+      border: 1px solid #1F2937;
+      border-radius: 8px;
+      font-size: 1rem;
       font-family: monospace;
       color: #F8FAFC;
       outline: none;
-      transition: border-color 150ms ease;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
     }
-    .input-group input::placeholder { color: #475569; }
-    .input-group input:focus { border-color: #22C55E; }
+    .input-group input::placeholder { color: #4B5563; }
+    .input-group input:focus { border-color: #22C55E; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1); }
     .input-group input:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .result {
       display: none;
-      background: #052E16;
-      border: 1px solid #166534;
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
       animation: fadeIn 200ms ease;
     }
     .result.show { display: block; }
     .result-label {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: #22C55E;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.6rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .result-label svg { width: 14px; height: 14px; }
     .result-url {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
     .result-url a {
       color: #4ADE80;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
       font-weight: 600;
       font-family: monospace;
       text-decoration: none;
@@ -498,92 +516,100 @@ function handleHome(request, env) {
     }
     .result-url a:hover { text-decoration: underline; }
 
-    .links-section { margin-top: 1.25rem; }
+    .links-section {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
     .links-section h3 {
-      font-size: 0.8rem;
-      color: #64748B;
-      margin-bottom: 0.6rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #334155;
+      font-size: 0.75rem;
+      color: #4B5563;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #1F2937;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
+      font-weight: 600;
     }
     .links-section h3 svg { width: 14px; height: 14px; }
     .link-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #1E293B;
-      font-size: 0.8rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #1F2937;
+      font-size: 0.9rem;
+      transition: background 150ms ease;
     }
     .link-item:last-child { border-bottom: none; }
+    .link-item:hover { background: rgba(34, 197, 94, 0.03); margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 6px; }
     .link-code {
       color: #22C55E;
       font-weight: 600;
       font-family: monospace;
-      min-width: 60px;
+      min-width: 70px;
     }
     .link-code:hover { text-decoration: underline; }
     .link-target {
-      color: #64748B;
+      color: #6B7280;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 280px;
+      max-width: 380px;
       text-align: right;
       font-family: monospace;
+      font-size: 0.85rem;
     }
 
     .error-msg {
       display: none;
-      background: #450A0A;
-      border: 1px solid #991B1B;
-      border-radius: 6px;
-      padding: 0.65rem 0.85rem;
-      margin-bottom: 0.75rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
       color: #FCA5A5;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-family: monospace;
     }
     .error-msg.show { display: block; }
 
     .loading {
       display: inline-block;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       border: 2px solid #0F172A;
       border-top-color: transparent;
       border-radius: 50%;
       animation: spin 600ms linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
     .login-hint {
       text-align: center;
-      color: #64748B;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
+      padding: 3rem 0;
     }
-    .login-hint .btn { margin-top: 1rem; }
+    .login-hint .btn { margin-top: 1.5rem; }
 
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.7);
       display: none; justify-content: center; align-items: center;
       z-index: 100;
+      backdrop-filter: blur(4px);
     }
     .modal-overlay.show { display: flex; }
     .modal-card {
-      background: #1E293B;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 1.5rem;
-      max-width: 400px;
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 440px;
       width: 90%;
       animation: modalIn 200ms ease;
     }
@@ -597,13 +623,13 @@ function handleHome(request, env) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         短链系统
       </h1>
-      <div id="authArea"></div>
+      <p>基于 Git 的极简短链接服务</p>
+      <div id="authArea" style="margin-top: 1rem;"></div>
     </div>
 
     <div id="loginHint" class="login-hint" style="display:none;">
-      <p>使用 GitHub 账号登录即可创建短链</p>
       <button class="btn btn-github" id="loginBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         GitHub 登录
       </button>
     </div>
@@ -632,10 +658,11 @@ function handleHome(request, env) {
     </div>
 
     <div id="mainForm" style="display:none;">
-      <div class="input-group">
-        <input type="url" id="urlInput" placeholder="https://example.com/very/long/path" aria-label="输入长链接" />
-        <button class="btn btn-primary" id="submitBtn" aria-label="生成短链">生成</button>
-      </div>
+      <div class="input-card">
+        <div class="input-group">
+          <input type="url" id="urlInput" placeholder="https://example.com/very/long/path" aria-label="输入长链接" />
+          <button class="btn btn-primary" id="submitBtn" aria-label="生成短链">生成短链</button>
+        </div>
 
       <div id="errorMsg" class="error-msg" role="alert"></div>
       <div id="result" class="result">
@@ -651,7 +678,7 @@ function handleHome(request, env) {
           </button>
         </div>
       </div>
-    </div>
+    </div></div>
 
     <div class="links-section">
       <h3>
