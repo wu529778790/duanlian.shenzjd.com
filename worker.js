@@ -987,7 +987,11 @@ function handleHome(request, env) {
     <div id="mainForm" style="display:none;">
       <div class="input-card">
         <div class="input-group">
-          <input type="url" id="urlInput" placeholder="https://example.com/very/long/path" aria-label="输入长链接" />
+          <input type="url" id="urlInput" placeholder="https://shenzjd.com/your/long/url" aria-label="输入长链接" />
+          <button class="btn btn-ghost" id="pasteBtn" type="button" aria-label="粘贴链接">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            粘贴
+          </button>
           <button class="btn btn-primary" id="submitBtn" aria-label="生成短链">生成短链</button>
         </div>
 
@@ -1234,6 +1238,28 @@ function handleHome(request, env) {
           btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制'
         }, 1500)
       })
+    })
+
+    // 粘贴按钮
+    $('#pasteBtn').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText()
+        if (text) {
+          $('#urlInput').value = text.trim()
+          $('#urlInput').focus()
+        }
+      } catch (e) {
+        // 权限被拒绝时提示用户手动粘贴
+        $('#urlInput').focus()
+      }
+    })
+
+    // 自动检测粘贴（当输入框获得焦点时监听粘贴事件）
+    $('#urlInput').addEventListener('paste', (e) => {
+      // 粘贴后自动聚焦到输入框
+      setTimeout(() => {
+        $('#urlInput').focus()
+      }, 0)
     })
 
     checkAuth()
