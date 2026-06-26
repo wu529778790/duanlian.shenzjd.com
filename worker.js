@@ -903,7 +903,6 @@ function getCSS() {
 
 function getBody() {
   return `
-  <nav class="navbar">
   <!-- Navigation -->
   <nav class="navbar">
     <a href="/" class="nav-logo">
