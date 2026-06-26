@@ -18,6 +18,7 @@ export default {
       if (pathname === '/logout') return handleLogout()
       if (pathname === '/api/links' && request.method === 'POST') return handleCreateLink(request, env)
       if (pathname === '/api/links' && request.method === 'GET') return handleListLinks(request, env)
+      if (pathname === '/api/links' && request.method === 'DELETE') return handleDeleteLink(request, env)
       if (pathname === '/api/user/links' && request.method === 'GET') return handleListUserLinks(request, env)
       if (pathname === '/api/user') return handleGetUser(request, env)
 
@@ -290,6 +291,70 @@ async function handleListUserLinks(request, env) {
     .filter(Boolean)
 
   return Response.json({ links })
+}
+
+// ========== 删除短链 ==========
+
+async function handleDeleteLink(request, env) {
+  const user = getUser(request, env)
+  if (!user) return Response.json({ error: '请先登录' }, { status: 401 })
+
+  const body = await request.json()
+  const { shortCode } = body
+  if (!shortCode) return Response.json({ error: '缺少 shortCode' }, { status: 400 })
+
+  const headers = {
+    Authorization: `Bearer ${user.token}`,
+    'User-Agent': 'duanlian-worker',
+    Accept: 'application/vnd.github.v3+json',
+  }
+
+  // 获取用户 fork 仓库的 HEAD
+  const refRes = await fetch(
+    `${GITHUB_API}/repos/${user.username}/${env.GITHUB_REPO}/git/ref/heads/main`,
+    { headers }
+  )
+  if (!refRes.ok) return Response.json({ error: '获取 ref 失败' }, { status: 502 })
+
+  const refData = await refRes.json()
+  const headSha = refData.object.sha
+
+  // 查找目标 commit 及其父 commit
+  const commitRes = await fetch(
+    `${GITHUB_API}/repos/${user.username}/${env.GITHUB_REPO}/git/commits/${headSha}`,
+    { headers }
+  )
+  if (!commitRes.ok) return Response.json({ error: '获取 commit 失败' }, { status: 502 })
+
+  const commitData = await commitRes.json()
+
+  // 检查是否是目标 commit（匹配前6位）
+  if (!commitData.sha.startsWith(shortCode)) {
+    return Response.json({ error: '只能删除最近一条短链' }, { status: 400 })
+  }
+
+  // 获取父 commit
+  if (!commitData.parents || commitData.parents.length === 0) {
+    return Response.json({ error: '已是初始 commit，无法删除' }, { status: 400 })
+  }
+
+  const parentSha = commitData.parents[0].sha
+
+  // 更新 ref 指向父 commit（相当于删除最近一条）
+  const updateRes = await fetch(
+    `${GITHUB_API}/repos/${user.username}/${env.GITHUB_REPO}/git/refs/heads/main`,
+    {
+      method: 'PATCH',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sha: parentSha, force: true }),
+    }
+  )
+  if (!updateRes.ok) {
+    const err = await updateRes.text()
+    return Response.json({ error: `删除失败: ${err}` }, { status: 502 })
+  }
+
+  return Response.json({ ok: true })
 }
 
 // ========== 短链重定向 ==========
@@ -588,11 +653,33 @@ function handleHome(request, env) {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 400px;
+      max-width: 360px;
       text-align: right;
       font-family: 'SF Mono', 'Fira Code', monospace;
       font-size: 0.85rem;
     }
+    .link-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #71717A;
+      cursor: pointer;
+      transition: all 150ms ease;
+      flex-shrink: 0;
+    }
+    .btn-icon:hover { background: #27272A; color: #FAFAFA; }
+    .btn-delete:hover { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
+    .btn-copy.copied { background: rgba(34, 197, 94, 0.15); color: #4ADE80; }
 
     /* Error */
     .error-msg {
@@ -776,15 +863,69 @@ function handleHome(request, env) {
     function renderLinks() {
       const container = $('#linksList')
       if (!links.length) {
-        container.innerHTML = '<p style="color:#475569;font-size:0.8rem;font-family:monospace;">暂无记录</p>'
+        container.innerHTML = '<p style="color:#52525B;font-size:0.85rem;font-family:monospace;">暂无记录</p>'
         return
       }
-      container.innerHTML = links.slice().reverse().map(link =>
-        '<div class="link-item">' +
+      container.innerHTML = links.slice().reverse().map((link, idx) => {
+        const isLatest = idx === 0 && window._loggedIn
+        const deleteBtn = isLatest
+          ? '<button class="btn-icon btn-delete" data-code="' + link.shortCode + '" title="删除此短链" aria-label="删除短链">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
+            '</button>'
+          : ''
+        const copyBtn = !window._loggedIn
+          ? '<button class="btn-icon btn-copy" data-link="' + link.shortLink + '" title="复制短链" aria-label="复制短链">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+            '</button>'
+          : ''
+        return '<div class="link-item">' +
           '<a class="link-code" href="' + link.shortLink + '" target="_blank">/' + link.shortCode + '</a>' +
-          '<span class="link-target" title="' + escapeHtml(link.targetUrl) + '">' + escapeHtml(link.targetUrl) + '</span>' +
+          '<div class="link-actions">' +
+            '<span class="link-target" title="' + escapeHtml(link.targetUrl) + '">' + escapeHtml(link.targetUrl) + '</span>' +
+            copyBtn + deleteBtn +
+          '</div>' +
         '</div>'
-      ).join('')
+      }).join('')
+
+      // 绑定删除事件
+      container.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const code = btn.dataset.code
+          if (!confirm('确定要删除此短链吗？')) return
+          btn.disabled = true
+          try {
+            const res = await fetch('/api/links', {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ shortCode: code }),
+            })
+            const data = await res.json()
+            if (res.ok) {
+              fetchLinks()
+            } else {
+              alert(data.error || '删除失败')
+              btn.disabled = false
+            }
+          } catch (e) {
+            alert('网络错误')
+            btn.disabled = false
+          }
+        })
+      })
+
+      // 绑定复制事件
+      container.querySelectorAll('.btn-copy').forEach(btn => {
+        btn.addEventListener('click', () => {
+          navigator.clipboard.writeText(btn.dataset.link).then(() => {
+            btn.classList.add('copied')
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
+            setTimeout(() => {
+              btn.classList.remove('copied')
+              btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
+            }, 1500)
+          })
+        })
+      })
     }
 
     function escapeHtml(str) {
