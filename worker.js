@@ -417,7 +417,7 @@ function handleHome(request, env) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
+    :root, :root[data-theme="light"] {
       --bg: #FFFFFF;
       --bg-card: #F4F4F5;
       --bg-input: #FFFFFF;
@@ -438,8 +438,29 @@ function handleHome(request, env) {
       --nav-bg: rgba(255, 255, 255, 0.8);
       --nav-border: #E4E4E7;
     }
+    :root[data-theme="dark"] {
+      --bg: #09090B;
+      --bg-card: #18181B;
+      --bg-input: #09090B;
+      --border: #27272A;
+      --text: #FAFAFA;
+      --text-secondary: #71717A;
+      --text-muted: #A1A1AA;
+      --accent: #22C55E;
+      --accent-dark: #16A34A;
+      --accent-bg: rgba(34, 197, 94, 0.08);
+      --accent-border: rgba(34, 197, 94, 0.2);
+      --btn-bg: #18181B;
+      --btn-hover: #27272A;
+      --error-bg: rgba(239, 68, 68, 0.1);
+      --error-border: rgba(239, 68, 68, 0.2);
+      --error-text: #FCA5A5;
+      --icon-btn-hover: #27272A;
+      --nav-bg: rgba(9, 9, 11, 0.8);
+      --nav-border: #27272A;
+    }
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --bg: #09090B;
         --bg-card: #18181B;
         --bg-input: #09090B;
@@ -527,6 +548,31 @@ function handleHome(request, env) {
     }
     .nav-social a:hover { background: var(--btn-hover); color: var(--text); }
     .nav-social svg { width: 18px; height: 18px; }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .theme-toggle:hover { background: var(--btn-hover); color: var(--text); }
+    .theme-toggle svg { width: 18px; height: 18px; }
+    .theme-toggle .icon-moon { display: none; }
+    .theme-toggle .icon-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+    :root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+    :root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
+    }
     @media (max-width: 768px) {
       .nav-links { display: none; }
     }
@@ -881,6 +927,10 @@ function handleHome(request, env) {
       <a href="https://bing.shenzjd.com/" class="nav-link" target="_blank" rel="noopener">🖼️ 必应壁纸</a>
     </div>
     <div class="nav-social">
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <a href="https://t.me/shenzjd_com" target="_blank" rel="noopener" aria-label="Telegram">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
       </a>
@@ -967,6 +1017,36 @@ function handleHome(request, env) {
   </div>
 
   <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle')
+    const root = document.documentElement
+
+    function getPreferredTheme() {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute('data-theme', theme)
+      localStorage.setItem('theme', theme)
+    }
+
+    applyTheme(getPreferredTheme())
+
+    themeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme')
+      const next = current === 'dark' ? 'light' : 'dark'
+      applyTheme(next)
+    })
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light')
+      }
+    })
+
     const $ = (sel) => document.querySelector(sel)
     let links = []
 
