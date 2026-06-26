@@ -406,17 +406,8 @@ function render404(shortCode) {
 
 // ========== 前端页面 ==========
 
-function handleHome(request, env) {
-  const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>短链系统 — duanlian.shenzjd.com</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+function getCSS() {
+  return `
     :root, :root[data-theme="light"] {
       --bg: #FFFFFF;
       --bg-card: #F4F4F5;
@@ -907,9 +898,12 @@ function handleHome(request, env) {
       animation: modalIn 250ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-  </style>
-</head>
-<body>
+  `
+}
+
+function getBody() {
+  return `
+  <nav class="navbar">
   <!-- Navigation -->
   <nav class="navbar">
     <a href="/" class="nav-logo">
@@ -1019,8 +1013,11 @@ function handleHome(request, env) {
       <div id="linksList"><p style="color:#475569;font-size:0.8rem;font-family:monospace;">暂无记录</p></div>
     </div>
   </div>
+  `
+}
 
-  <script>
+function getScript() {
+  return `
     // Theme toggle
     const themeToggle = document.getElementById('themeToggle')
     const root = document.documentElement
@@ -1244,7 +1241,7 @@ function handleHome(request, env) {
     $('#pasteBtn').addEventListener('click', async () => {
       try {
         const text = await navigator.clipboard.readText()
-        if (text && /^https?:\/\/.+/.test(text.trim())) {
+        if (text && new RegExp('^https?://.+').test(text.trim())) {
           $('#urlInput').value = text.trim()
           // 自动提交
           $('#submitBtn').click()
@@ -1287,7 +1284,23 @@ function handleHome(request, env) {
         forkModal.classList.remove('show')
       }
     })
-  </script>
+  `
+}
+
+function handleHome(request, env) {
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快链 — duanlian.shenzjd.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>${getCSS()}</style>
+</head>
+<body>${getBody()}
+  <script>${getScript()}</script>
 </body>
 </html>`
 
