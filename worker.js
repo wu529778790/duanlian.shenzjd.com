@@ -757,12 +757,12 @@ function handleHome(request, env) {
     /* Login Hint */
     .login-hint {
       text-align: center;
-      padding: 3rem 0;
+      padding: 2rem 0;
     }
     .login-hint p {
       color: var(--text-muted);
       font-size: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     /* Modal */
