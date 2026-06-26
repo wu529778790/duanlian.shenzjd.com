@@ -43,20 +43,79 @@ git push origin main
 
 ## 🛠️ 部署方式
 
-### Cloudflare Workers
+### Cloudflare Workers（推荐）
 
-```javascript
-const GIT_REPO = "https://github.com/wu529778790/duanlian.shenzjd.com"
-export default {
-  async fetch(request) {
-    const { pathname } = new URL(request.url)
-    const gitPatch = `${GIT_REPO}/commit${pathname}.patch`
-    const patch = await fetch(gitPatch, { cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 86400 } }}).then(res => res.text())
-    const url = pathname === '/' ? GIT_REPO : patch.match(/^Subject:\s*\[PATCH\](.*)$/m)?.[1]?.trim()
-    return Response.redirect(url || GIT_REPO)
-  }
-}
+本项目提供完整的 Cloudflare Worker 部署方案，包含前端页面、GitHub OAuth 登录和短链创建 API。
+
+#### 1. 创建 GitHub OAuth App
+
+1. 访问 [GitHub Developer Settings](https://github.com/settings/developers)
+2. 点击 **New OAuth App**
+3. 填写信息：
+   - **Application name**: `duanlian`
+   - **Homepage URL**: `https://duanlian.shenzjd.com`
+   - **Authorization callback URL**: `https://duanlian.shenzjd.com/callback`
+4. 创建后记录 **Client ID** 和 **Client Secret**
+
+#### 2. 安装 Wrangler CLI
+
+```bash
+npm install -g wrangler
+# 或
+npx wrangler
 ```
+
+#### 3. 配置项目
+
+项目根目录已有 `wrangler.toml`，修改其中的域名和仓库信息即可。
+
+#### 4. 设置密钥（Secret）
+
+```bash
+npx wrangler secret put GITHUB_CLIENT_ID
+# 输入你的 Client ID
+
+npx wrangler secret put GITHUB_CLIENT_SECRET
+# 输入你的 Client Secret
+```
+
+#### 5. 部署
+
+**手动部署：**
+
+```bash
+npx wrangler deploy
+```
+
+**自动部署（推荐）：**
+
+项目已配置 GitHub Actions 自动部署（`.github/workflows/deploy.yml`）。每次 push 到 main 分支且修改了 `worker.js` 或 `wrangler.toml` 时自动部署。
+
+需要在 GitHub 仓库 Settings → Secrets and variables → Actions 中配置：
+
+| Secret 名称 | 说明 |
+|-------------|------|
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API Token（需要 Workers 权限） |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Account ID |
+
+> 获取方式：Cloudflare Dashboard → My Profile → API Tokens → Create Token → 选择 "Edit Cloudflare Workers" 模板
+
+#### 6. 绑定自定义域名
+
+在 Cloudflare Dashboard → Workers → 你的 Worker → Settings → Domains & Routes 中添加自定义域名。
+
+#### 本地开发
+
+```bash
+npx wrangler dev
+# 访问 http://localhost:8787
+```
+
+> **注意**：本地开发时需要在 `.dev.vars` 文件中配置密钥：
+> ```
+> GITHUB_CLIENT_ID=your_client_id
+> GITHUB_CLIENT_SECRET=your_client_secret
+> ```
 
 ### 腾讯云 EdgeOne / 阿里云 ESA
 
@@ -87,9 +146,12 @@ export default {
 ```
 .
 ├── README.md                    # 项目说明 & 短链列表
+├── worker.js                    # Cloudflare Worker 主文件（前端 + OAuth + API + 重定向）
+├── wrangler.toml                # Wrangler 部署配置
 ├── .github/
 │   └── workflows/
-│       └── update-readme.yml   # 自动更新工作流
+│       ├── deploy.yml           # 自动部署 Worker
+│       └── update-readme.yml   # 自动更新短链表格
 └── (空提交历史，存储短链信息)
 ```
 
