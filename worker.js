@@ -1244,12 +1244,16 @@ function handleHome(request, env) {
     $('#pasteBtn').addEventListener('click', async () => {
       try {
         const text = await navigator.clipboard.readText()
-        if (text) {
+        if (text && /^https?:\/\/.+/.test(text.trim())) {
+          $('#urlInput').value = text.trim()
+          // 自动提交
+          $('#submitBtn').click()
+        } else if (text) {
+          // 非 URL 内容，填入输入框让用户修改
           $('#urlInput').value = text.trim()
           $('#urlInput').focus()
         }
       } catch (e) {
-        // 权限被拒绝时提示用户手动粘贴
         $('#urlInput').focus()
       }
     })
