@@ -33,8 +33,8 @@
 
 1. 打开 [GitHub Developer Settings](https://github.com/settings/developers) → **New OAuth App**
 2. 填写：
-   - **Homepage URL**: `https://duanlian.shenzjd.com`
-   - **Authorization callback URL**: `https://duanlian.shenzjd.com/callback`
+   - **Homepage URL**: `https://duanlian.shenzjd.workers.dev`
+   - **Authorization callback URL**: `https://duanlian.shenzjd.workers.dev/callback`
 3. 记录 **Client ID** 和 **Client Secret**
 
 ### 2. 部署 Worker
@@ -71,7 +71,7 @@ npx wrangler dev
 
 ## 使用
 
-1. 访问 `https://duanlian.shenzjd.com`
+1. 访问 `https://duanlian.shenzjd.workers.dev`
 2. 点击 **GitHub 登录**
 3. 首次登录时，系统会提示将 fork 主仓库，请确认授权
 4. 登录后输入目标链接，点击 **生成**
